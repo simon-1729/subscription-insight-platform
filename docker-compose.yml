@@ -80,7 +80,7 @@ services:
 # Spring Boot Service
 # =====================
   subscription-insight-service:
-    build: .
+    build: ./subscription-insight-service
     container_name: subscription-insight-service
     ports:
       - "8080:8080"

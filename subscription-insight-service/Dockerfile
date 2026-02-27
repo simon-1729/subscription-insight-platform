@@ -9,7 +9,7 @@ WORKDIR /build
 COPY pom.xml .
 
 # Download dependencies (cached unless pom changes)
-RUN mvn -B -q -e -DskipTests dependency:go-offline
+RUN mvn -B -e -DskipTests dependency:go-offline
 
 # Copy source code
 COPY src ./src

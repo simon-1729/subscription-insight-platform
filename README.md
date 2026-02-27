@@ -25,15 +25,3 @@ http://localhost:8080/actuator/health
 http://localhost:8080/swagger-ui.html
 
 
-## Shut down
-```bash
-ctrl + c
-```
-```bash
-docker compose down
-```
-
-## Subsequent start up
-```bash
-docker compose up -d
-```
