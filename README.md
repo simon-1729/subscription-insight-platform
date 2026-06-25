@@ -21,7 +21,7 @@ calls an LLM to generate a plain English explanation and recommended interventio
 | Service | Stack | Responsibility |
 |---|---|---|
 | subscription-insight-service | Spring Boot, PostgreSQL | Customer and subscription management, Kafka producer/consumer |
-| subscription-insight-engine | FastAPI, Python | Risk assessment, LLM integration, Kafka producer/consumer |
+| subscription-insight-engine | FastAPI, Python | Risk assessment, LLM integration, Recommendations, Kafka producer/consumer |
 
 ### Event Flow
 
