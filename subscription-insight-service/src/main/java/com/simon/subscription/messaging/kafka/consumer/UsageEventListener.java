@@ -16,7 +16,8 @@ public class UsageEventListener {
 
     @KafkaListener(
         topics = "usage-topic",
-        groupId = "subscription-group"
+        groupId = "subscription-group",
+        properties = {"spring.json.value.default.type=com.simon.subscription.messaging.events.UsageEvent"}
     )
     public void listen(UsageEvent event) {
 
