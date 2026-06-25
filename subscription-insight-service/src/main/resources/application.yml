@@ -23,10 +23,11 @@ spring:
 
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         "[spring.json.trusted.packages]": com.simon.subscription.messaging.events
-        "[spring.json.value.default.type]": com.simon.subscription.messaging.events.UsageEvent
+        "[spring.json.use.type.headers]": false
+        "[spring.json.type.mapping]": usageEvent:com.simon.subscription.messaging.events.UsageEvent, riskAssessedEvent:com.simon.subscription.messaging.events.RiskAssessedEvent
 
 logging:
   level:

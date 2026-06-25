@@ -2,9 +2,9 @@
 
 HELP.md
 target/
+**/playground/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
-!**/src/main/**/playground/
 !**/src/test/**/target/
 
 ### STS ###
