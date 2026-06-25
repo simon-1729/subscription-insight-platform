@@ -36,7 +36,8 @@ subscription-insight-service
         ▼
 subscription-insight-engine
         │
-        │  scores risk via LLM
+        │  scores risk and recommends 
+        |  intervention via LLM.
         │  publishes RiskEvent
         ▼
     Kafka (risk-assessed-topic)
@@ -45,7 +46,7 @@ subscription-insight-engine
         ▼
 subscription-insight-service
         │
-        │  persists risk assessment
+        │  notifies/persists risk assessment
         ▼
     PostgreSQL
 ```
@@ -162,7 +163,7 @@ curl -X 'GET' \
 ```
 subscription-insight-service  →  publishes UsageEvent to Kafka
         ↓
-subscription-insight-engine   →  consumes UsageEvent, scores risk via LLM
+subscription-insight-engine   →  consumes UsageEvent, scores risk, adds recommendation
         ↓
 subscription-insight-engine   →  publishes RiskEvent to Kafka
         ↓
