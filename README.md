@@ -1,4 +1,4 @@
-# Subscription Insight Platform
+# Subscription Insight Platform [![PR Unit Tests](https://github.com/simon-1729/subscription-insight-platform/actions/workflows/pr-tests.yml/badge.svg)](https://github.com/simon-1729/subscription-insight-platform/actions/workflows/pr-tests.yml)
 
 A production-style platform for analysing customer subscription behaviour 
 and predicting churn risk — identifying customers likely to cancel and 
