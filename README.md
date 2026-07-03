@@ -232,13 +232,14 @@ The core event-driven platform is complete and fully operational. Planned extens
 - LLM-generated retention emails surfaced to customer success teams for review before sending — the system acts as a decision support tool, not an autonomous actor
 - Confidence scoring alongside churn probability to flag predictions where the customer profile falls outside the model's training distribution
 
+**Design Decision — Event Pre-Screening**
+
+The Subscription Service publishes all usage events to Kafka without filtering — its responsibility is customer and subscription management, not risk assessment. The Insight Engine applies a lightweight rules-based pre-screen on consumption, passing only high-signal events (payment failures, plan downgrades, significant usage drops) to the XGBoost model evaluation layer. This keeps concerns cleanly separated, avoids unnecessary ML inference on low-signal events, and means risk criteria can be tuned entirely within the engine without touching the Subscription Service.
+
+
 **Phase 3 — Adaptive Model Bootstrapping**
 
 A schema-aware dataset matching tool to solve the cold start problem for new businesses 
 without sufficient historical data. See [FUTURE.md](docs/FUTURE.md) for the full design proposal.
 
 
-**Design Decision — Event Pre-Screening**
-
-
-The Subscription Service publishes all usage events to Kafka without filtering — its responsibility is customer and subscription management, not risk assessment. The Insight Engine applies a lightweight rules-based pre-screen on consumption, passing only high-signal events (payment failures, plan downgrades, significant usage drops) to the XGBoost model evaluation layer. This keeps concerns cleanly separated, avoids unnecessary ML inference on low-signal events, and means risk criteria can be tuned entirely within the engine without touching the Subscription Service.
