@@ -232,7 +232,10 @@ The core event-driven platform is complete and fully operational. Planned extens
 - LLM-generated retention emails surfaced to customer success teams for review before sending — the system acts as a decision support tool, not an autonomous actor
 - Confidence scoring alongside churn probability to flag predictions where the customer profile falls outside the model's training distribution
 
+**Phase 3 — Adaptive Model Bootstrapping**
 
+A schema-aware dataset matching tool to solve the cold start problem for new businesses 
+without sufficient historical data. See [FUTURE.md](docs/FUTURE.md) for the full design proposal.
 
 
 **Design Decision — Event Pre-Screening**
