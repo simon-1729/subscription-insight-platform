@@ -26,29 +26,41 @@ calls an LLM to generate a plain English explanation and recommended interventio
 ### Event Flow
 
 ```
-subscription-insight-service
-        │
-        │  publishes UsageEvent
-        ▼
-    Kafka (usage-topic)
-        │
-        │  consumes UsageEvent
-        ▼
-subscription-insight-engine
-        │
-        │  scores risk and recommends 
-        |  intervention via LLM.
-        │  publishes RiskEvent
-        ▼
-    Kafka (risk-assessed-topic)
-        │
-        │  consumes RiskEvent
-        ▼
-subscription-insight-service
-        │
-        │  notifies/persists risk assessment
-        ▼
-    PostgreSQL
+  subscription-insight-service
+          │
+          │    publishes ALL UsageEvents (no filtering)
+          ▼
+      Kafka (usage-topic)
+          │
+          │    consumes ALL UsageEvents
+          ▼
+  subscription-insight-engine
+          │
+          ├── [Pre-screen layer] lightweight rules-based filter
+          │        │
+          │        ├── low signal → acknowledge and drop, no further processing
+          │        │
+          │        └── high signal → pass to model evaluation layer
+          │                │
+          │                ▼
+          │        [Model evaluation layer] XGBoost scoring + SHAP
+          │                │
+          │                ▼
+          │        [LLM layer] plain English explanation + retention email draft
+          │                │
+          │                ▼
+          │        publishes RiskEvent
+          ▼
+      Kafka (risk-assessed-topic)
+          │
+          │    consumes RiskEvent
+          ▼
+  subscription-insight-service
+          │
+          │──  notifies
+          |    persists risk assessment
+          ▼
+      PostgreSQL
 ```
 
 ## Tech Stack
@@ -57,7 +69,7 @@ subscription-insight-service
 - **FastAPI** — async Python service, Kafka consumer/producer
 - **Apache Kafka** (KRaft mode) — event streaming between services
 - **PostgreSQL** — persistent storage
-- **OpenAI API** — LLM-powered risk scoring
+- **OpenAI API** — LLM-powered plain English explanations and retention recommendations
 - **Docker Compose** — local orchestration of all services
 
 ## Getting Started
@@ -208,3 +220,22 @@ subscription-insight-platform/
 └── docker-compose.yml
 ```
 
+## Roadmap
+
+The core event-driven platform is complete and fully operational. Planned extensions include:
+
+**Phase 2 — Analytics Engine**
+
+- XGBoost classification model for churn probability scoring, trained on real-world subscription behaviour data
+- SHAP-based feature importance to identify the primary churn drivers for each individual customer
+- Deterministic risk tier assignment (critical / high / medium / low) based on churn probability bands, keeping scoring logic transparent and auditable
+- LLM-generated retention emails surfaced to customer success teams for review before sending — the system acts as a decision support tool, not an autonomous actor
+- Confidence scoring alongside churn probability to flag predictions where the customer profile falls outside the model's training distribution
+
+
+
+
+**Design Decision — Event Pre-Screening**
+
+
+The Subscription Service publishes all usage events to Kafka without filtering — its responsibility is customer and subscription management, not risk assessment. The Insight Engine applies a lightweight rules-based pre-screen on consumption, passing only high-signal events (payment failures, plan downgrades, significant usage drops) to the XGBoost model evaluation layer. This keeps concerns cleanly separated, avoids unnecessary ML inference on low-signal events, and means risk criteria can be tuned entirely within the engine without touching the Subscription Service.
